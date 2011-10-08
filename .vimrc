@@ -9,8 +9,6 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
-map <F2> :NERDTreeToggle<CR>
-
 "GUI settings
 set guioptions-=m "remove menu bar
 set guioptions-=T "remove toolbar
@@ -19,3 +17,8 @@ set gfn=Droid\ Sans\ Mono\ 11
 
 "LaTex Settings
 au BufEnter *.tex colorscheme desert
+
+"key mappings
+nnoremap j gj
+nnoremap k gk
+map <F2> :NERDTreeToggle<CR>
