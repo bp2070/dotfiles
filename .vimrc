@@ -1,5 +1,5 @@
-#plugins minibufexplorer nerdtree/commandT snipmate
-#colorscheme mustang
+"plugins minibufexplorer nerdtree/commandT snipmate
+"colorscheme mustang
 
 syntax on
 colorscheme slate
