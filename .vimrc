@@ -1,8 +1,15 @@
 "plugins minibufexplorer nerdtree/commandT snipmate
 "colorscheme mustang
 
+set nocompatible
+set hidden
+set nobackup
+set noswapfile
+nnoremap ; :
+
 syntax on
-colorscheme slate
+set t_Co=256
+colorscheme mustang "slate
 set number
 set smartindent 
 set wrap linebreak
