@@ -6,6 +6,8 @@ set nocompatible
 set hidden
 set nobackup
 set noswapfile
+set history=1000
+set undolevels=1000
 
 "Syntax highlighting
 syntax on
