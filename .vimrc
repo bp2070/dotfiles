@@ -54,7 +54,7 @@ set nolazyredraw           " turn off lazy redraw
 set number                 " line numbers
 set wildmenu               " turn on wild menu
 set wildmode=list:longest,full
-set ch=2                   " command line height
+"set ch=2                   " command line height
 set backspace=2            " allow backspacing over everything in insert mode
 set shortmess=filtIoOA     " shorten messages
 set report=0               " tell us about changes
