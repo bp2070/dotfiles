@@ -5,6 +5,13 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
+export EDITOR=vim
+
+# add rbenv to path 
+export PATH="$HOME/.rbenv/bin:$PATH"
+# Add rbenv init to your shell to enable shims and autocompletion
+eval "$(rbenv init -)"
+
 # don't put duplicate lines in the history. See bash(1) for more options
 # ... or force ignoredups and ignorespace
 HISTCONTROL=ignoredups:ignorespace
@@ -76,11 +83,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
-
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
