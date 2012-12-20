@@ -7,11 +7,6 @@
 
 export EDITOR=vim
 
-# add rbenv to path 
-export PATH="$HOME/.rbenv/bin:$PATH"
-# Add rbenv init to your shell to enable shims and autocompletion
-eval "$(rbenv init -)"
-
 # don't put duplicate lines in the history. See bash(1) for more options
 # ... or force ignoredups and ignorespace
 HISTCONTROL=ignoredups:ignorespace
