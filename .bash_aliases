@@ -8,3 +8,6 @@ alias ....="cd ..\..\.."
 alias .....="cd ..\..\..\.."
 alias ......="cd ..\..\..\..\.."
 alias .......="cd ..\..\..\..\..\.."
+
+#must have trash-cli installed
+alias rm="trash"
