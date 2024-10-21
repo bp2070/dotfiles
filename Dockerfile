@@ -35,6 +35,7 @@ RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
 RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
 RUN echo "set -gx PATH \$PATH /root/.nvm/versions/node/v${NODE_VERSION}/bin/" >> /root/.config/fish/config.fish
 
-RUN git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm && ~/.config/tmux/plugins/tpm/bin/install_plugins
+RUN git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+RUN ~/.config/tmux/plugins/tpm/bin/install_plugins
 
 RUN chsh -s /usr/bin/fish
