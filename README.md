@@ -8,4 +8,4 @@ build:
 
 run:
 
-`docker run -it dotfiles tmux -u`
+`docker run -it -v dotfiles-home:/root dotfiles tmux -u`
