@@ -23,8 +23,10 @@ RUN curl -Lo cc.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3
 RUN unzip cc.zip -d /root/.fonts/
 RUN fc-cache -fv
 
-COPY config/ /root/.config/
-
+COPY fish/ /root/.config/
+COPY nvim/ /root/.config/
+COPY tmux/ /root/.config/
+COPY starship.toml /root/.config/
 
 # installs nvm (Node Version Manager)
 ENV NODE_VERSION=20.18.0
