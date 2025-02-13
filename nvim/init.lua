@@ -1,2 +1,7 @@
-require("bpetz.core")
-require("bpetz.lazy")
+-- bootstrap lazy.nvim, LazyVim and your plugins
+require("config.lazy")
+require("oil").setup({
+  keymaps = {
+    ["<C-[>"] = { "actions.close", mode = "n" },
+  },
+})
