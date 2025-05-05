@@ -5,9 +5,12 @@ local catppuccin_palette = {
 	peach = "#fab387",
 	green = "#a6e3a1",
 	base = "#1e1e2e",
+	mantle = "#181825",
+	crust = "#11111b",
 	subtext0 = "#a6adc8",
 	subtext1 = "#bac2de",
 	text = "#cdd6f4",
+	base_grayer = "#212129",
 }
 local config = wezterm.config_builder()
 
@@ -44,11 +47,13 @@ config.cursor_blink_rate = 250
 config.enable_tab_bar = true
 -- config.hide_tab_bar_if_only_one_tab = true
 config.show_tab_index_in_tab_bar = false
+config.show_new_tab_button_in_tab_bar = false
 config.use_fancy_tab_bar = false
 config.colors = {
 	tab_bar = {
-		background = catppuccin_palette.base,
+		background = catppuccin_palette.base_grayer,
 	},
+	background = catppuccin_palette.base_grayer,
 }
 
 -- Tab Formatting
@@ -65,7 +70,7 @@ local function tab_title(tab_info)
 end
 
 wezterm.on("format-tab-title", function(tab, _, _, _, hover)
-	local background = catppuccin_palette.base
+	local background = catppuccin_palette.base_grayer
 	local foreground = catppuccin_palette.subtext1
 
 	if tab.is_active then
