@@ -1,4 +1,6 @@
 local wezterm = require("wezterm")
+local resurrect = wezterm.plugin.require("https://github.com/MLFlexer/resurrect.wezterm")
+
 local launch_menu = {}
 local catppuccin_palette = {
 	mauve = "#cba6f7",
@@ -26,7 +28,7 @@ local catppuccin_palette = {
 
 local config = wezterm.config_builder()
 
-local function tab(tab_info)
+local function tab_component(tab_info)
 	local title = tab_info.tab_title
 	local tab_index = tostring(tab_info.tab_index + 1)
 
@@ -59,8 +61,8 @@ tabline.setup({
 		tabline_b = { cond = false },
 		tabline_c = { "  " },
 		tabline_z = { cond = false },
-		tab_active = { tab, padding = 0 },
-		tab_inactive = { tab, padding = 0 },
+		tab_active = { tab_component, padding = 0 },
+		tab_inactive = { tab_component, padding = 0 },
 	},
 })
 
@@ -108,7 +110,36 @@ config.colors = {
 
 -- Keybindings
 config.keys = {
-	{ key = "v", mods = "CTRL", action = wezterm.action({ PasteFrom = "Clipboard" }) },
+	{
+		key = "v",
+		mods = "CTRL",
+		action = wezterm.action({ PasteFrom = "Clipboard" }),
+	},
+	{
+		key = "w",
+		mods = "ALT",
+		action = wezterm.action_callback(function(win, pane)
+			resurrect.state_manager.save_state(resurrect.workspace_state.get_workspace_state())
+		end),
+	},
+	{
+		key = "W",
+		mods = "ALT",
+		action = resurrect.window_state.save_window_action(),
+	},
+	{
+		key = "T",
+		mods = "ALT",
+		action = resurrect.tab_state.save_tab_action(),
+	},
+	{
+		key = "s",
+		mods = "ALT",
+		action = wezterm.action_callback(function(win, pane)
+			resurrect.state_manager.save_state(resurrect.workspace_state.get_workspace_state())
+			resurrect.window_state.save_window_action()
+		end),
+	},
 }
 
 return config
