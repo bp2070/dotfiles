@@ -4,3 +4,6 @@
 if vim.loop.os_uname().sysname == "Windows_NT" then
   vim.o.shell = "pwsh"
 end
+
+vim.g.root_spec = { "cwd" }
+
