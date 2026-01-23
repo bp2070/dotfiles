@@ -1,0 +1,10 @@
+{{ if ne .chezmoi.os "windows" }}
+AppData
+readonly_OneDrive - US Army
+{{ end }}
+
+{{ if ne .chezmoi.os "darwin" }}
+{{ end }}
+
+{{ if ne .chezmoi.os "linux" }}
+{{ end }}
