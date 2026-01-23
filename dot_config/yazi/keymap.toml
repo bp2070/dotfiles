@@ -1,0 +1,6 @@
+[mgr]
+prepend_keymap = [
+  { on = "<Tab>", run = [ "toggle", "arrow 1" ], desc = "Toggle the current selection state" },
+  { on = "<Space>", run = "spot", desc = "Spot hovered file" },
+]
+
