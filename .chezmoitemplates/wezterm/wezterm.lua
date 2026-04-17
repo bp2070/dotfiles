@@ -124,6 +124,7 @@ config.font_size = 10
 config.window_decorations = "RESIZE"
 config.background = {
 	{
+		-- https://github.com/drwpow/awesome-terminal-backgrounds/blob/main/backgrounds/gradient-sapphire.png
 		source = { File = wezterm.config_dir .. "/gradient-sapphire2.png" },
 	  hsb = { brightness = .1 },
 		repeat_x = "NoRepeat",
