@@ -32,6 +32,20 @@ local catppuccin_palette = {
 	surface1 = "#45475a",
 }
 
+local gruvbox_palette = {
+  fg1    = '#282828',
+  color2 = '#504945',
+  fg2    = '#ddc7a1',
+  fg3    = '#cdd6f4',
+  color3 = '#32302f',
+  color4 = '#a89984',
+  color5 = '#7daea3',
+  color6 = '#a9b665',
+  color7 = '#d8a657',
+  color8 = '#d3869b',
+  color9 = '#ea6962',
+}
+
 -- This event handler will be called when the custom "close_all_tabs" event is emitted.
 -- ClostTab is not a valid action...need to find a way to close all tabs
 -- wezterm.on("close_all_tabs", function(window, pane)
@@ -60,13 +74,19 @@ tabline.setup({
 		tab_separators = " ",
 		theme_overrides = {
 			tab = {
-				active = { fg = catppuccin_palette.peach, bg = catppuccin_palette.mantle },
-				inactive = { fg = catppuccin_palette.subtext1, bg = catppuccin_palette.mantle },
+				active = {
+		        fg = gruvbox_palette.color3,
+		        bg = gruvbox_palette.fg2,
+		      },
+				inactive = {
+		        fg = gruvbox_palette.fg2,
+		        bg = gruvbox_palette.color2,
+		      },
 			},
 			normal_mode = {
-				a = { fg = catppuccin_palette.mantle, bg = catppuccin_palette.lavender },
-				b = { fg = catppuccin_palette.lavender, bg = catppuccin_palette.surface0 },
-				c = { fg = catppuccin_palette.lavender, bg = catppuccin_palette.mantle },
+				-- a = { fg = catppuccin_palette.mantle, bg = catppuccin_palette.lavender },
+				b = { fg = gruvbox_palette.fg2, bg = gruvbox_palette.color2 },
+				c = { fg = gruvbox_palette.fg2, bg = gruvbox_palette.color2 },
 			},
 		},
 	},
@@ -92,23 +112,28 @@ end
 config.color_scheme = "Catppuccin Mocha"
 config.launch_menu = launch_menu
 
-config.font = wezterm.font("CaskaydiaCove Nerd Font Mono")
+config.font = wezterm.font("Cascadia Code")
+-- config.font = wezterm.font("Hack Nerd Font")
+-- config.font = wezterm.font("FiraCode Nerd Font")
+-- config.font = wezterm.font("JetBrains Mono")
+-- config.font = wezterm.font("SauceCodePro Nerd Font")
+
 config.font_size = 10
 
 -- Window Configuration
 config.window_decorations = "RESIZE"
 config.background = {
 	{
-		source = { File = wezterm.config_dir .. "/stars_1.jpg" },
-    hsb = { brightness = .025 },
+		source = { File = wezterm.config_dir .. "/gradient-sapphire2.png" },
+	  hsb = { brightness = .1 },
 		repeat_x = "NoRepeat",
 	},
-	{
-		source = { Color = catppuccin_palette.mantle },
-		height = "100%",
-		width = "100%",
-		opacity = .6,
-	},
+	-- {
+	-- 	source = { Color = 'black' },
+	-- 	height = "100%",
+	-- 	width = "100%",
+	-- 	opacity = .3,
+	-- },
 }
 config.window_close_confirmation = "NeverPrompt"
 config.win32_system_backdrop = "Acrylic"
@@ -126,7 +151,7 @@ config.show_new_tab_button_in_tab_bar = false
 config.use_fancy_tab_bar = false
 config.colors = {
 	tab_bar = {
-		background = catppuccin_palette.mantle,
+		background = gruvbox_palette.color2,
 	},
 }
 
