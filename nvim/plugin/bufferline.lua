@@ -1,0 +1,12 @@
+-- require("bufferline").setup {
+--   options = {
+--     always_show_bufferline = false,
+--     diagnostics = "nvim_lsp",
+--
+--   }
+-- }
+--
+-- vim.api.nvim_set_hl(0, "BufferLineBufferSelected", { fg = "#f5e0dc", bg = "#1e1e2e" }) -- rosewater, base
+-- vim.api.nvim_set_hl(0, "BufferLineFill", { bg = "#181825" }) -- mantle
+-- vim.api.nvim_set_hl(0, "BufferLineIndicatorSelected", { fg = "#f5e0dc" }) -- rosewater
+
