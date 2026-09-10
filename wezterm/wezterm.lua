@@ -53,9 +53,10 @@ config.keys = {
 	},
 }
 
--- Ctrl+Shift+number is received by WezTerm as the shifted punctuation key
--- (!, @, #, ...). Override those default tab bindings, then forward the
--- original physical number chord to Herdr for workspace selection.
+-- Ctrl+Shift+number is received by WezTerm as shifted punctuation
+-- (!, @, #, ...). Terminal protocols cannot reliably preserve that complete
+-- chord set, so translate the physical key to Alt+number. Herdr binds the
+-- latter as its tab-selection shortcut; Alt is an unambiguous ESC sequence.
 local shifted_number_keys = { "!", "@", "#", "$", "%", "^", "&", "*", "(" }
 for number, trigger_key in ipairs(shifted_number_keys) do
 	table.insert(config.keys, {
@@ -63,7 +64,7 @@ for number, trigger_key in ipairs(shifted_number_keys) do
 		mods = "CTRL|SHIFT",
 		action = wezterm.action.SendKey({
 			key = tostring(number),
-			mods = "CTRL|SHIFT",
+			mods = "ALT",
 		}),
 	})
 end
