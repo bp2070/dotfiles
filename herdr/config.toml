@@ -20,7 +20,9 @@ name = "catppuccin"
 
 # Override individual color tokens on top of the base theme.
 # Accepts: hex (#rrggbb), named colors, rgb(r,g,b), or panel_bg = "reset"
-# [theme.custom]
+[theme.custom]
+surface_dim = "#403e4f"
+# surface_dim = "#b4befe"
 # panel_bg = "reset"
 # accent = "#f5c2e7"
 # red = "#ff6188"
@@ -88,7 +90,7 @@ prefix = "ctrl+k"
 # previous_tab = "prefix+p"
 # next_tab = "prefix+n"
 # switch_tab = "prefix+1..9"
-# switch_workspace = ""   # optional indexed binding, e.g. "prefix+shift+1..9"
+switch_workspace ="prefix+shift+1..9" 
 # close_tab = "prefix+shift+x"
 # rename_pane = "prefix+shift+p"
 # edit_scrollback = "prefix+e"
@@ -122,7 +124,17 @@ prefix = "ctrl+k"
 # key = "prefix+alt+g"
 # type = "pane"
 # command = "lazygit"
+[[keys.command]]
+key = "prefix+p"
+type = "pane"
+command = "pwsh.exe -NoProfile -ExecutionPolicy Bypass -File \"%APPDATA%\\herdr\\scripts\\pick-templateworkspace.ps1\""
+description = "Pick workspace (nvim/pi/lazygit/term)"
 
+[[keys.command]]
+key = "prefix+i"
+type = "pane"
+command = "pwsh.exe -NoProfile -ExecutionPolicy Bypass -File \"%APPDATA%\\herdr\\scripts\\init-templateworkspace.ps1\""
+description = "Init current workspace (nvim/pi/lazygit/term)"
 # Legacy indexed shortcut config is still parsed for compatibility.
 # Prefer switch_tab, switch_workspace, and focus_agent for new configs.
 # [keys.indexed]
