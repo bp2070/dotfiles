@@ -1,6 +1,6 @@
 $env:FZF_DEFAULT_OPTS="--height 60% --layout reverse --border --walker-skip .git,node_modules"
 $env:BAT_PAGING="never"
-$env:NVIM_APPNAME="nvim"
+$env:NVIM_APPNAME="nvim-pack"
 
 Set-PSReadLineOption -PredictionViewStyle ListView
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
@@ -19,7 +19,7 @@ Set-PSReadLineKeyHandler -Key "Shift+Tab" -ScriptBlock {
       # Use .NET file reading (orders of magnitude faster than Get-Content)
       $allLines = [System.IO.File]::ReadLines($historyPath)
       $history = [System.Linq.Enumerable]::TakeLast($allLines, 5000)
-
+      
       # Cast to an array so we can reverse it (newest commands on top)
       $historyArray = [string[]]$history
       [array]::Reverse($historyArray)
@@ -64,6 +64,8 @@ Register-EngineEvent -SourceIdentifier PowerShell.OnIdle -SupportEvent -Action {
       # Remove our queue variable to avoid polluting the environment
       Remove-Variable -Name '__initQueue' -Scope Global -Force
 
+      # Have `prompt` restore the exact screen row used for the loading layout.
+      $global:__replaceLoadingPrompt = $true
       [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
     }
 }
