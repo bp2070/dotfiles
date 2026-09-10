@@ -12,7 +12,9 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 		args = { "pwsh.exe", "-NoLogo" },
 	})
 end
-config.enable_kitty_keyboard = false
+-- Preserve modifier information for Ctrl+Shift+number. Without enhanced
+-- keyboard reporting, these chords collapse into Ctrl+! / Ctrl+@ / etc.
+config.enable_kitty_keyboard = true
 config.launch_menu = launch_menu
 
 config.color_scheme = "Catppuccin Mocha"
@@ -50,5 +52,20 @@ config.keys = {
 		action = wezterm.action({ PasteFrom = "Clipboard" }),
 	},
 }
+
+-- Ctrl+Shift+number is received by WezTerm as the shifted punctuation key
+-- (!, @, #, ...). Override those default tab bindings, then forward the
+-- original physical number chord to Herdr for workspace selection.
+local shifted_number_keys = { "!", "@", "#", "$", "%", "^", "&", "*", "(" }
+for number, trigger_key in ipairs(shifted_number_keys) do
+	table.insert(config.keys, {
+		key = trigger_key,
+		mods = "CTRL|SHIFT",
+		action = wezterm.action.SendKey({
+			key = tostring(number),
+			mods = "CTRL|SHIFT",
+		}),
+	})
+end
 
 return config
