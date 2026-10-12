@@ -12,9 +12,7 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 		args = { "pwsh.exe", "-NoLogo" },
 	})
 end
--- Preserve modifier information for Ctrl+Shift+number. Without enhanced
--- keyboard reporting, these chords collapse into Ctrl+! / Ctrl+@ / etc.
-config.enable_kitty_keyboard = true
+config.enable_kitty_keyboard = false
 config.launch_menu = launch_menu
 
 config.color_scheme = "Catppuccin Mocha"
@@ -52,21 +50,5 @@ config.keys = {
 		action = wezterm.action({ PasteFrom = "Clipboard" }),
 	},
 }
-
--- Ctrl+Shift+number is received by WezTerm as shifted punctuation
--- (!, @, #, ...). Terminal protocols cannot reliably preserve that complete
--- chord set, so translate the physical key to Alt+number. Herdr binds the
--- latter as its tab-selection shortcut; Alt is an unambiguous ESC sequence.
-local shifted_number_keys = { "!", "@", "#", "$", "%", "^", "&", "*", "(" }
-for number, trigger_key in ipairs(shifted_number_keys) do
-	table.insert(config.keys, {
-		key = trigger_key,
-		mods = "CTRL|SHIFT",
-		action = wezterm.action.SendKey({
-			key = tostring(number),
-			mods = "ALT",
-		}),
-	})
-end
 
 return config

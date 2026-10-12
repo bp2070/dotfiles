@@ -48,11 +48,11 @@ default_shell = "pwsh"
 # channel = "stable"
 
 # Check herdr.dev for new Herdr versions in the background.
-version_check = false
+version_check = true
 
 # Check herdr.dev for remote agent-detection manifest updates in the background.
-manifest_check = false
-channel = "preview"
+manifest_check = true
+channel = "stable"
 
 [keys]
 # Prefix key to enter prefix mode (default: "ctrl+b")
@@ -63,7 +63,7 @@ channel = "preview"
 # Named punctuation such as minus, comma, ampersand, plus, and backtick is also accepted.
 # Most reliable direct bindings are ctrl+letter, function keys, and explicit modified chords.
 # alt+..., cmd/super, and punctuation-with-modifiers may depend on your terminal/tmux setup.
-prefix = "ctrl+k"
+prefix = "ctrl+a"
 
 # Prefix-mode actions
 # help = "prefix+?"
@@ -89,9 +89,11 @@ prefix = "ctrl+k"
 # rename_tab = "prefix+shift+t"
 # previous_tab = "prefix+p"
 # next_tab = "prefix+n"
-# switch_tab = "prefix+1..9"
-# Direct shortcut: Ctrl+Shift+1 through Ctrl+Shift+9 switch workspaces 1 through 9.
-switch_workspace = "ctrl+shift+1..9"
+# WezTerm maps Ctrl+Shift+1..9 to Alt+1..9 because terminals cannot
+# consistently encode Ctrl+Shift+number chords. Do not press Alt+1..9 directly.
+switch_tab = "alt+1..9"
+# Prefix+1 through Prefix+9 switch workspaces 1 through 9.
+switch_workspace = "prefix+1..9"
 # close_tab = "prefix+shift+x"
 # rename_pane = "prefix+shift+p"
 # edit_scrollback = "prefix+e"
@@ -180,8 +182,7 @@ description = "Init current workspace (nvim/pi/lazygit/term)"
 # Ask for confirmation before closing a workspace
 # confirm_close = true
 
-# Ask for a tab name before creating a new tab.
-# Set false to create tabs immediately with generated names.
+# Create tabs immediately with generated numeric names instead of prompting.
 prompt_new_tab_name = false
 
 # Draw borders around split panes.

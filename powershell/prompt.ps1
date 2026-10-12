@@ -2,12 +2,6 @@
 
 function prompt {
 
-    # Remember where the provisional prompt starts, so its completed version
-    # can be redrawn at exactly the same screen position.
-    if (Test-Path variable:global:__initQueue) {
-        $global:__loadingPromptTop = [Console]::CursorTop
-    }
-
     # Colors
     $e = [char]27
     $cFrame = "$e[38;2;92;95;119m" # Muted Gray-Blue
@@ -131,18 +125,7 @@ function prompt {
         $linePadding = $cFrame + ($lineChar * $paddingLength)
     }
 
-    # Restore the provisional prompt's exact top row after async startup.
-    # InvokePrompt may have moved the cursor, so do this here immediately
-    # before emitting the completed layout.
-    if (Test-Path variable:global:__replaceLoadingPrompt) {
-        [Console]::SetCursorPosition(0, $global:__loadingPromptTop)
-        [Console]::Write("$e[0J")
-        Remove-Variable -Name '__replaceLoadingPrompt' -Scope Global -Force
-        Remove-Variable -Name '__loadingPromptTop' -Scope Global -Force
-    }
-
-    # The host/PSReadLine positions prompts on a fresh line. Avoid adding an
-    # extra spacer line so an async refresh can redraw this layout in place.
+    # Output Layout without trailing newline traps
     [Console]::Write("`n$leftSide$linePadding$rightSide`n")
 
     return "$cFrame$botLeft$lineChar$cReset "
