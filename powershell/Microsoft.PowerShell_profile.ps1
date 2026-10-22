@@ -1,3 +1,4 @@
+$env:POWERSHELL_UPDATECHECK = 'Off'
 $env:FZF_DEFAULT_OPTS="--height 60% --layout reverse --border --walker-skip .git,node_modules"
 $env:BAT_PAGING="never"
 $env:NVIM_APPNAME="nvim-pack"

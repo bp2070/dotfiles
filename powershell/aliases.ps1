@@ -1,4 +1,4 @@
-function dc {
+function DockerCompose {
   docker compose $args
 }
 
@@ -36,5 +36,6 @@ function rmrf {
 
 Set-Alias p pnpm
 Set-Alias v nvim
+Set-Alias dc DockerCompose
 Set-Alias gg lazygit
 Set-Alias dk drizzle-kit

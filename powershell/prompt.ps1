@@ -12,34 +12,27 @@ function prompt {
     $e = [char]27
     $cFrame = "$e[38;2;92;95;119m" # Muted Gray-Blue
     $cText = "$e[38;2;147;154;183m" # Soft White/Gray
-    $fgBlue = "$e[38;2;137;180;250m" # Vibrant Blue
-    $fgLightGrey = "$e[38;2;200;200;200m"
-    $fgGrey = "$e[38;2;18;18;18m"
     $fgPeach = "$e[38;2;250;179;135m"
-    $fgYellow = "$e[38;2;249;226;175m"
-    $bgGrey = "$e[48;2;18;18;18m" # charcoal grey bg
-
-    $bgReset = "$e[49m"
+    $fgYellow = "$e[38;2;249;226;175m" # Pale Yellow
+    $fgPath = "$e[38;2;245;224;220m" # Pale Rose (#f5e0dc)
     $cReset = "$e[0m"
 
     # Frame Glyphs
     $topLeft  = "╭"
-    $topRight = "╮"
     $botLeft  = "╰"
     $lineChar = "─"
     $chevron  = "⟩"
-    $leftRoundCap = ""
-    $rightRoundCap = ""
 
     $fullPath = $ExecutionContext.SessionState.Path.CurrentLocation.Path
+    $relativePath = [System.IO.Path]::GetRelativePath($HOME, $fullPath)
 
-    if ($fullPath -eq $HOME) {
-        $currentFolder = "~"
+    if ($relativePath -eq ".") {
+        $displayPath = "~"
+    } elseif (-not $relativePath.StartsWith("..")) {
+        $displayPath = Join-Path "~" $relativePath
     } else {
-        $currentFolder = Split-Path $fullPath -Leaf
-        if ($currentFolder -eq "") { 
-          $currentFolder = $fullPath 
-        }
+        # Paths outside the home directory remain absolute.
+        $displayPath = $fullPath
     }
 
     $gitBranch = ""
@@ -50,14 +43,14 @@ function prompt {
     $gitSegment = ""
     if ($gitBranch) {
         # Check for Clean/Dirty status
-        git diff --quiet 2>$null
+        & git diff --quiet 2>$null
         $dirtySymbol = if ($LASTEXITCODE -ne 0) { "$fgPeach*$cText" } else { "" }
         
         # Check Ahead/Behind status
-        $upstream = git rev-parse --abbrev-ref '@{u}' 2>$null
+        $null = & git rev-parse --abbrev-ref '@{u}' 2>$null
         $syncSymbol = ""
         if ($LASTEXITCODE -eq 0) {
-            $counts = git rev-list --left-right --count 'HEAD...@{u}' 2>$null
+            $counts = & git rev-list --left-right --count 'HEAD...@{u}' 2>$null
             if ($counts -match "(\d+)\s+(\d+)") {
                 $ahead = [int]$Matches[1]
                 $behind = [int]$Matches[2]
@@ -66,32 +59,33 @@ function prompt {
             }
         }
 
-        $gitSegment = "$cText$chevron$fgLightGrey  $cText$gitBranch"
-        if($syncSymbol -and $dirtySymbol) { $gitSegment += " [$dirtySymbol $syncSymbol]" } 
-        elseif ($syncSymbol) { $gitSegment += " [$syncSymbol]" } 
-        elseif ($dirtySymbol) { $gitSegment += " [$dirtySymbol]" }
+        $gitSegment = "$cText on $fgPath $fgPath$gitBranch"
+        if ($syncSymbol -and $dirtySymbol) { $gitSegment += "$cText [$dirtySymbol $syncSymbol]" }
+        elseif ($syncSymbol) { $gitSegment += "$cText [$syncSymbol]" }
+        elseif ($dirtySymbol) { $gitSegment += "$cText [$dirtySymbol]" }
     }
 
     # Profile loading text
     $profileText = ""
-    if(Test-Path variable:global:__initQueue) {
-        $profileText = "$cFrame$lineChar$lineChar Loading Profile... "
+    if (Test-Path variable:global:__initQueue) {
+        $profileText = "$cFrame$lineChar Loading Profile... "
     }
 
     # Assemble Right Side
     $timestamp = (Get-Date).ToString("HH:mm:ss")
-    $rightSide = " $cText$timestamp $cFrame$lineChar$topRight$cReset"
+    $rightSide = " $cText$timestamp $cReset"
 
     # --- DYNAMIC TRUNCATION CHECK ---
     $windowWidth = $Host.UI.RawUI.WindowSize.Width
     $ansiRegex = "\x1B\[[0-9;]*[a-zA-Z]"
 
-    # Test layout length before committing strings
-    $testLeft = "$cFrame$topLeft$lineChar$fgGrey$leftRoundCap$bgGrey$fgBlue   $cText$chevron$fgLightGrey   $cText$currentFolder$gitSegment $bgReset$fgGrey$rightRoundCap$profileText"
+    # Test layout length before committing strings.
+    $leftPrefix = "$cFrame$topLeft$lineChar  $fgPath"
+    $testLeft = "$leftPrefix$displayPath$gitSegment  $profileText"
     $cleanLeft = [regex]::Replace($testLeft, $ansiRegex, "")
     $cleanRight = [regex]::Replace($rightSide, $ansiRegex, "")
 
-    # If it overflows, truncate the git branch first, then the folder name if needed
+    # If it overflows, truncate the git branch first, then the path if needed
     $safetyBuffer = 6
     $overflow = $cleanLeft.Length + $cleanRight.Length + $safetyBuffer - $windowWidth
 
@@ -100,9 +94,9 @@ function prompt {
             # Truncate Git Branch
             $gitBranch = $gitBranch.Substring(0, $gitBranch.Length - $overflow - 3) + "..."
         } else {
-            # Git branch isn't long enough to clear the overflow entirely, truncate folder too
-            if ($currentFolder.Length -gt 5) {
-                $currentFolder = "..." + $currentFolder.Substring([Math]::Min($overflow, $currentFolder.Length - 4))
+            # Git branch isn't long enough to clear the overflow entirely, truncate the path too
+            if ($displayPath.Length -gt 5) {
+                $displayPath = "..." + $displayPath.Substring([Math]::Min($overflow, $displayPath.Length - 4))
             }
             if ($gitBranch.Length -gt 4) {
                 $gitBranch = $gitBranch.Substring(0, 4) + "..."
@@ -111,16 +105,15 @@ function prompt {
         
         # Rebuild the git segment with truncated branch
         if ($gitBranch) {
-            $gitSegment = "$cText$chevron$fgLightGrey  $cText$gitBranch"
-            if($syncSymbol -and $dirtySymbol) { $gitSegment += " [$dirtySymbol $syncSymbol]" } 
-            elseif ($syncSymbol) { $gitSegment += " [$syncSymbol]" } 
-            elseif ($dirtySymbol) { $gitSegment += " [$dirtySymbol]" }
+            $gitSegment = "$cText on $fgPath $fgPath$gitBranch"
+            if ($syncSymbol -and $dirtySymbol) { $gitSegment += "$cText [$dirtySymbol $syncSymbol]" }
+            elseif ($syncSymbol) { $gitSegment += "$cText [$syncSymbol]" }
+            elseif ($dirtySymbol) { $gitSegment += "$cText [$dirtySymbol]" }
         }
     }
 
     # Re-assemble final Left Side
-    $leftSide = "$cFrame$topLeft$lineChar$fgGrey$leftRoundCap$bgGrey$fgBlue   $cText$fgLightGrey$gitSegment $chevron   $cText$currentFolder"
-    $leftSide += " $bgReset$fgGrey$rightRoundCap$profileText"
+    $leftSide = "$leftPrefix$displayPath$gitSegment  $profileText"
 
     # Recalculate definitive Padding
     $cleanLeft = [regex]::Replace($leftSide, $ansiRegex, "")
@@ -134,7 +127,7 @@ function prompt {
     # Restore the provisional prompt's exact top row after async startup.
     # InvokePrompt may have moved the cursor, so do this here immediately
     # before emitting the completed layout.
-    if (Test-Path variable:global:__replaceLoadingPrompt) {
+    if ((Test-Path variable:global:__replaceLoadingPrompt) -and (Test-Path variable:global:__loadingPromptTop)) {
         [Console]::SetCursorPosition(0, $global:__loadingPromptTop)
         [Console]::Write("$e[0J")
         Remove-Variable -Name '__replaceLoadingPrompt' -Scope Global -Force
@@ -145,5 +138,5 @@ function prompt {
     # extra spacer line so an async refresh can redraw this layout in place.
     [Console]::Write("`n$leftSide$linePadding$rightSide`n")
 
-    return "$cFrame$botLeft$lineChar$cReset "
+    return "$cFrame$botLeft$lineChar$fgYellow ❯$cReset "
 }
