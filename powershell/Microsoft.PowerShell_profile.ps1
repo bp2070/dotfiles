@@ -3,6 +3,9 @@ $env:FZF_DEFAULT_OPTS="--height 60% --layout reverse --border --walker-skip .git
 $env:BAT_PAGING="never"
 $env:NVIM_APPNAME="nvim-pack"
 
+# DECSCUSR: request a steady bar cursor from terminals that support it.
+Write-Host "$([char]27)[6 q" -NoNewline
+
 Set-PSReadLineOption -PredictionViewStyle ListView
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 
